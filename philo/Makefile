@@ -7,7 +7,7 @@ CC = cc
 # compiler flags
 CFLAGS = -Wall -Werror -Wextra -MMD -O3
 INCLUDE = -I./include
-DEBUG_FLAGS = -g -O0
+DEBUG_FLAGS = -g -O0 -fsanitize=address
 
 # src files and path for them
 VPATH = src

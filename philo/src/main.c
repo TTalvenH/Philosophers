@@ -36,6 +36,8 @@ int	init_philo(t_philo *var, char **argv)
 	var->sleep_time = parse_int(argv[4], var);
 	var->threads = malloc(var->philo_n * sizeof(pthread_t));
 	var->mutex = malloc(var->philo_n * sizeof(pthread_mutex_t));
+	if (!var->threads || !var->mutex)
+		return (-1);
 	return (0);
 }
 
