@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "philosophers.h"
-
-
+#include <unistd.h>
 
 int	check_argv(char **argv)
 {
@@ -28,34 +27,45 @@ int	check_argv(char **argv)
 	return (0);
 }
 
-int	init_philo(t_philo *var, char **argv)
+int	init_data(t_data *var, char **argv)
 {
+	size_t i;
+
+	i = 0;
 	var->philo_n = parse_int(argv[1], var);
 	var->die_time = parse_int(argv[2], var);
 	var->eat_time = parse_int(argv[3], var);
 	var->sleep_time = parse_int(argv[4], var);
-	var->threads = malloc(var->philo_n * sizeof(pthread_t));
-	var->mutex = malloc(var->philo_n * sizeof(pthread_mutex_t));
-	if (!var->threads || !var->mutex)
+	var->philos = malloc(var->philo_n * sizeof(pthread_t));
+	var->forks = malloc(var->philo_n * sizeof(pthread_mutex_t));
+	if (!var->philos || !var->forks)
 		return (-1);
+	while (i < var->philo_n)
+	{
+		var->philos[i].id = i + 1;
+		var->philos[i].left = &var->forks[i];
+		var->philos[i].right = &var->forks[(i + 1) % var->philo_n];
+		i++;
+	}
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo	var;
+	t_data	var;
 
-	var.threads = NULL;
-	var.mutex = NULL;
+	gettimeofday(&var.start_time, NULL);
+	var.philos = NULL;
+	var.forks = NULL;
 	if (argc == 5)
 	{
-		if (check_argv (argv) || init_philo(&var, argv))
+		if (check_argv (argv) || init_data(&var, argv))
 			error(&var);
-		printf("%zu\n", var.philo_n);
-		printf("%zu\n", var.die_time);
-		printf("%zu\n", var.eat_time);
-		printf("%zu\n", var.sleep_time);
-
+		while(1)
+		{
+			usleep(100000);
+			printf("%zu\n", elapsed_time(&var));
+		}
 		return (0);
 	}
 	printf("Usage: ./philo [n_philo] [time_die] [time_eat] [time_sleep]\n");

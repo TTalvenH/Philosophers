@@ -29,7 +29,7 @@ static int	check_max_min(int i, int next_digit)
 	return (0);
 }
 
-int	parse_int(char *str, t_philo *var)
+int	parse_int(char *str, t_data *var)
 {
 	int	i;
 	int	sign;
