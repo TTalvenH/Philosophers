@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	error(t_philo **philos)
+void	error(t_data *var)
 {
-	philos = NULL;
+	var = NULL;
 	printf("Error\n");
 	exit (-1);
 }

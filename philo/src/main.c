@@ -27,50 +27,52 @@ int	check_argv(char **argv)
 	return (0);
 }
 
-int	init_data(t_philo **philos, char **argv)
+int	init_philos(t_philo *philos, t_data *var)
 {
-	t_data	*var;
 	size_t	i;
 
 	i = 0;
-
-	var = malloc(sizeof(t_data));
-
-	var->forks = NULL;
-	gettimeofday(&var->start_time, NULL);
-	var->philo_n = parse_int(argv[1], philos);
-	var->die_time = parse_int(argv[2], philos);
-	var->eat_time = parse_int(argv[3], philos);
-	var->sleep_time = parse_int(argv[4], philos);
-	var->start_time_msec = 0;
-	var->forks = malloc(var->philo_n * sizeof(t_fork));
-	philos = malloc(var->philo_n * sizeof(t_philo *));
-	if (!philos || !var->forks)
-		return (-1);
 	while (i < var->philo_n)
 	{
-		philos[i] = malloc(sizeof(t_philo));
-		philos[i]->thread = NULL;
-		philos[i]->id = i + 1;
-		philos[i]->left = &var->forks[i];
-		philos[i]->right = &var->forks[(i + 1) % var->philo_n];
-		philos[i]->vars = var;
+		philos[i].thread = malloc(sizeof(pthread_t));
+		if (!philos[i].thread)
+			return (-1);
+		philos[i].id = i + 1; 	
+		philos[i].left = &var->forks[i];
+		philos[i].right = &var->forks[(i + 1) % var->philo_n];
+		philos[i].vars = var;
 		i++;
 	}
 	return (0);
 }
 
+int	init_var(t_data *var, char **argv)
+{
+	gettimeofday(&var->start_time, NULL);
+	var->philo_n = parse_int(argv[1], var);
+	var->die_time = parse_int(argv[2], var);
+	var->eat_time = parse_int(argv[3], var);
+	var->sleep_time = parse_int(argv[4], var);
+	var->start_time_msec = 0;
+	var->forks = malloc(var->philo_n * sizeof(t_fork));
+	if (!var->forks)
+		return (-1);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
-	t_philo	**philos;
+	t_philo	*philos;
+	t_data	*var;
 
-	philos = NULL;
 	if (argc == 5)
 	{
-		if (check_argv (argv) || init_data(philos, argv))
-			error(philos);
-		printf("%zu\n", philos[0]->vars->philo_n);
-		exit(0);
+		var = malloc(sizeof(t_data));
+		if (check_argv (argv) || init_var(var, argv))
+			error(var);
+		philos = malloc(sizeof(t_philo) * var->philo_n);
+		if (!philos || init_philos(philos, var) < 0)
+			error(var);
 		philo_thread(philos);
 		return (0);
 	}

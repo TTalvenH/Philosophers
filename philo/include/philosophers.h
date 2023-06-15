@@ -36,9 +36,9 @@ typedef struct s_philo
 	t_data		*vars;
 }t_philo;
 
-void	error(t_philo **philos);
-int		parse_int(char *str, t_philo **philos);
+void	error(t_data *var);
+int		parse_int(char *str, t_data *var);
 size_t	elapsed_time(t_data *var);
-void	*philo_thread(t_philo **philos);
+void	*philo_thread(t_philo *philos);
 
 #endif
