@@ -29,7 +29,7 @@ static int	check_max_min(int i, int next_digit)
 	return (0);
 }
 
-int	parse_int(char *str, t_data *var)
+int	parse_int(char *str, t_philo **philos)
 {
 	int	i;
 	int	sign;
@@ -42,12 +42,12 @@ int	parse_int(char *str, t_data *var)
 			sign = -1;
 		str++;
 		if (!*str)
-			error(var);
+			error(philos);
 	}
 	while (*str != '\0')
 	{
 		if (!(*str >= '0' && *str <= '9') || check_max_min(i, *str - '0'))
-			error(var);
+			error(philos);
 		i = i * 10 + (*str - '0') * sign;
 		str++;
 	}

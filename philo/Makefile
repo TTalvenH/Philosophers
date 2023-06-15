@@ -1,5 +1,5 @@
 # Program name
-NAME = push_swap
+NAME = philo
 
 # compiler
 CC = cc

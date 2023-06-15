@@ -2,24 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	error(t_data *var)
+void	error(t_philo **philos)
 {
-	if (var->philos != NULL)
-		free(var->philos);
-	if (var->forks != NULL)
-		free(var->forks);
+	philos = NULL;
 	printf("Error\n");
 	exit (-1);
 }
 
 size_t	elapsed_time(t_data *var)
 {
-	size_t	sec_diff;
-	size_t	usec_diff;
+	size_t	end_time_msec;
 
+	if (!var->start_time_msec)
+		var->start_time_msec = ((var->start_time.tv_sec * 1000) \
+		+ (var->start_time.tv_usec / 1000));
 	gettimeofday(&var->end_time, NULL);
-	sec_diff = var->end_time.tv_sec - var->start_time.tv_sec;
-	usec_diff = var->end_time.tv_usec - var->start_time.tv_usec;
-
-	return ((sec_diff * 1000) + (usec_diff / 1000));
+	end_time_msec = ((var->end_time.tv_sec * 1000)
+			+ (var->end_time.tv_usec / 1000));
+	return (end_time_msec - var->start_time_msec);
 }
