@@ -1,43 +1,6 @@
 #include "philosophers.h"
 #include <stdio.h> //! do we need?
 
-void	pick_forks(t_philo *philos)
-{
-	pthread_mutex_lock(philos->left);
-	pthread_mutex_lock(philos->right);
-}
-
-void	*routine(void *arg)
-{
-	t_philo	*philos;
-	int		eating;
-	int		thinking;
-	int		sleeping;
-
-	eating = 0;
-	thinking = 0;
-	sleeping = 0;
-	philos = (t_philo *)arg;
-	while (1)
-	{
-		pick_forks(philos);
-		if (eating)
-		{
-
-		}
-		else if (thinking)
-		{
-
-		}
-		else if (sleeping)
-		{
-
-		}
-	}
-	printf("test\n");
-	return (NULL);
-}
-
 void	start_philos(t_philo *philos)
 {
 	size_t	i;
@@ -45,7 +8,16 @@ void	start_philos(t_philo *philos)
 	i = 0;
 	while (i < philos[0].vars->philo_n)
 	{
-		pthread_create(philos[i].thread, NULL, routine, (void *)&philos[i]);
+		pthread_create(&(philos[i].thread), NULL, routine, (void *)&philos[i]);
+		i++;
+	}
+	i = 0;
+	while (i < philos[0].vars->philo_n)
+	{
+		if (pthread_join(philos[i].thread, NULL))
+		{
+			printf("join fail\n");
+		}
 		i++;
 	}
 }

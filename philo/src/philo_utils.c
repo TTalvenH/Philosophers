@@ -4,20 +4,34 @@
 
 void	error(t_data *var)
 {
-	var = NULL;
+	free(var);
 	printf("Error\n");
 	exit (-1);
 }
 
-size_t	elapsed_time(t_data *var)
+size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time)
 {
+	size_t	start_time_msec;
 	size_t	end_time_msec;
+	start_time_msec =((start_time->tv_sec * 1000)
+			+ (start_time->tv_usec / 1000));
+	end_time_msec = ((end_time->tv_sec * 1000)
+			+ (end_time->tv_usec / 1000));
+	return (end_time_msec - start_time_msec);
+}
 
-	if (!var->start_time_msec)
-		var->start_time_msec = ((var->start_time.tv_sec * 1000) \
-		+ (var->start_time.tv_usec / 1000));
-	gettimeofday(&var->end_time, NULL);
-	end_time_msec = ((var->end_time.tv_sec * 1000)
-			+ (var->end_time.tv_usec / 1000));
-	return (end_time_msec - var->start_time_msec);
+void	ft_bzero(void *s, size_t n)
+{
+	while (n > 0)
+	{
+		*(char *)s = '\0';
+		s++;
+		n--;
+	}
+}
+
+void	dead_mutex_check(t_philo *philos)
+{
+	pthread_mutex_lock(&philos->vars->starved_mutex);
+	pthread_mutex_unlock(&philos->vars->starved_mutex);
 }

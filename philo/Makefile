@@ -5,13 +5,13 @@ NAME = philo
 CC = cc
 
 # compiler flags
-CFLAGS = -Wall -Werror -Wextra -w -MMD -O3
+CFLAGS = -Wall -Werror -Wextra -MMD -O3
 INCLUDE = -I./include
 DEBUG_FLAGS = -g -O0 -fsanitize=address
 
 # src files and path for them
-VPATH = src
-SRC = main.c philo_thread.c philo_utils.c parse_int.c
+VPATH = src:src/routine
+SRC = main.c philo_thread.c philo_utils.c parse_int.c routine.c pick_forks.c
 
 # obj files and path for them
 OBJ_DIR = obj

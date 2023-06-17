@@ -32,9 +32,10 @@ int	init_philos(t_philo *philos, t_data *var)
 	size_t	i;
 
 	i = 0;
+	ft_bzero((void *)philos, sizeof(t_philo));
 	while (i < var->philo_n)
 	{
-		philos[i].thread = malloc(sizeof(pthread_t));
+		philos[i].thread = (pthread_t)malloc(sizeof(pthread_t));
 		if (!philos[i].thread)
 			return (-1);
 		philos[i].id = i + 1; 	
@@ -48,15 +49,22 @@ int	init_philos(t_philo *philos, t_data *var)
 
 int	init_var(t_data *var, char **argv)
 {
-	gettimeofday(&var->start_time, NULL);
+	int	i;
+
+	i = 0;
+	gettimeofday(&var->s_time, NULL);
 	var->philo_n = parse_int(argv[1], var);
 	var->die_time = parse_int(argv[2], var);
 	var->eat_time = parse_int(argv[3], var);
 	var->sleep_time = parse_int(argv[4], var);
-	var->start_time_msec = 0;
 	var->forks = malloc(var->philo_n * sizeof(t_fork));
+	ft_bzero((void *)var->forks, sizeof(var->philo_n * sizeof(t_fork)));
 	if (!var->forks)
 		return (-1);
+	while (i < (int)var->philo_n)
+		pthread_mutex_init(&var->forks[i++].lock, NULL);
+	pthread_mutex_init(&var->output_mutex, NULL);
+	pthread_mutex_init(&var->starved_mutex, NULL);
 	return (0);
 }
 
@@ -76,5 +84,6 @@ int	main(int argc, char **argv)
 		philo_thread(philos);
 		return (0);
 	}
+	
 	printf("Usage: ./philo [n_philo] [time_die] [time_eat] [time_sleep]\n");
 }
