@@ -77,5 +77,6 @@ int	pick_forks(t_philo *philos)
 			if (!get_forks_first_right(philos))
 				return (0);
 		}
+		usleep(100);
 	}
 }

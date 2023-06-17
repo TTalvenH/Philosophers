@@ -32,6 +32,7 @@ typedef struct s_data
 	t_timeval		s_time;
 	pthread_mutex_t	output_mutex;
 	pthread_mutex_t	starved_mutex;
+	int				starved;
 	t_fork			*forks;
 }t_data;
 
@@ -60,7 +61,9 @@ void	ft_bzero(void *s, size_t n);
 
 void	state_message(t_philo *philos, int task);
 int		pick_forks(t_philo *philos);
-void	dead_mutex_check(t_philo *philos);
+int		check_starved_state(t_philo *philos);
+void	free_everything(t_philo *philos);
+
 
 
 #endif

@@ -100,6 +100,7 @@ int	main(int argc, char **argv)
 		var = init_var(argv);
 		philos = init_philos(var);
 		philo_thread(philos);
+		free_everything(philos);
 		return (0);
 	}
 	printf("Usage: ./philo [n_philo] [time_die] [time_eat] [time_sleep]\n");

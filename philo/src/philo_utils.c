@@ -2,6 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+void	free_everything(t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	while (i < (int)philos->vars->philo_n)
+		pthread_mutex_destroy(&philos->vars->forks[i++].lock);
+	free(philos->vars->forks);
+	free(philos->vars);
+	free(philos);
+}
+
 void	error(t_philo *philos, t_data *var)
 {
 	free(var->forks);
@@ -32,8 +45,14 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	dead_mutex_check(t_philo *philos)
+int	check_starved_state(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->vars->starved_mutex);
+	if (philos->vars->starved)
+	{
+		pthread_mutex_unlock(&philos->vars->starved_mutex);
+		return (1);
+	}
 	pthread_mutex_unlock(&philos->vars->starved_mutex);
+	return (0);
 }

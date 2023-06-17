@@ -15,9 +15,7 @@ void	start_philos(t_philo *philos)
 	while (i < philos[0].vars->philo_n)
 	{
 		if (pthread_join(philos[i].thread, NULL))
-		{
 			printf("join fail\n");
-		}
 		i++;
 	}
 }
