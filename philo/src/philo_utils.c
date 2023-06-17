@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	error(t_data *var)
+void	error(t_philo *philos, t_data *var)
 {
+	free(var->forks);
 	free(var);
+	free(philos);
 	printf("Error\n");
 	exit (-1);
 }
