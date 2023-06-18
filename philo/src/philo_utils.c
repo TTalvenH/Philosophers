@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void	free_everything(t_philo *philos)
 {
 	int	i;
@@ -24,35 +23,26 @@ void	error(t_philo *philos, t_data *var)
 	exit (-1);
 }
 
-size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time)
+void	thread_error(t_philo *philos)
 {
-	size_t	start_time_msec;
-	size_t	end_time_msec;
-	start_time_msec =((start_time->tv_sec * 1000)
-			+ (start_time->tv_usec / 1000));
-	end_time_msec = ((end_time->tv_sec * 1000)
-			+ (end_time->tv_usec / 1000));
-	return (end_time_msec - start_time_msec);
+	int	i;
+
+	i = 0;
+	while (i < (int)philos->vars->philo_n)
+		pthread_mutex_destroy(&philos->vars->forks[i++].lock);
 }
 
-void	ft_bzero(void *s, size_t n)
+int	pthread_mutex_error(pthread_mutex_t *mutex, int	lock)
 {
-	while (n > 0)
+	if (lock == LOCK)
 	{
-		*(char *)s = '\0';
-		s++;
-		n--;
+		if (pthread_mutex_lock(mutex))
+			return (-1);
 	}
-}
-
-int	check_starved_state(t_philo *philos)
-{
-	pthread_mutex_lock(&philos->vars->starved_mutex);
-	if (philos->vars->starved)
+	else if (lock == UNLOCK)
 	{
-		pthread_mutex_unlock(&philos->vars->starved_mutex);
-		return (1);
+		if (pthread_mutex_unlock(mutex))
+			return (-1);
 	}
-	pthread_mutex_unlock(&philos->vars->starved_mutex);
 	return (0);
 }

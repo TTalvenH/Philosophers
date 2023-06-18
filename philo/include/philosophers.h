@@ -14,6 +14,8 @@
 # define THINKING 2
 # define FORKS 3
 # define DEAD 4
+# define LOCK 0
+# define UNLOCK 1
 
 typedef struct timeval	t_timeval;
 
@@ -25,6 +27,7 @@ typedef struct s_fork
 
 typedef struct s_data
 {
+	int				error;
 	size_t			philo_n;
 	size_t			die_time;
 	size_t			eat_time;
@@ -57,13 +60,14 @@ void	*routine(void *arg);
 size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time);
 size_t	start_elapsed_time(t_data *var);
 size_t	last_meal_et(size_t last_meal);
-void	ft_bzero(void *s, size_t n);
 
-void	state_message(t_philo *philos, int task);
+int		state_message(t_philo *philos, int task);
 int		pick_forks(t_philo *philos);
-int		check_starved_state(t_philo *philos);
+int		check_starved_or_error(t_philo *philos);
 void	free_everything(t_philo *philos);
-
+void	custom_delay(t_philo *philo, unsigned int msec);
+int		pthread_mutex_error(pthread_mutex_t *mutex, int	lock);
+void	thread_error(t_philo *philos);
 
 
 #endif

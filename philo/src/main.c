@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "philosophers.h"
 #include <unistd.h>
+#include <string.h>
 
 static int	check_argv(char **argv)
 {
@@ -36,7 +37,7 @@ static t_philo	*init_philos(t_data *var)
 	philos = malloc(sizeof(t_philo) * var->philo_n);
 	if (!philos)
 		error(NULL, var);
-	ft_bzero((void *)philos, sizeof(t_philo) * var->philo_n);
+	memset((void *)philos, 0, sizeof(t_philo) * var->philo_n);
 	while (i < var->philo_n)
 	{
 		philos[i].id = i + 1; 	
@@ -72,7 +73,7 @@ static t_data	*init_var(char **argv)
 	var = malloc(sizeof(t_data));
 	if (!var)
 		error(NULL, NULL);
-	ft_bzero((void *)var, sizeof(t_data));
+	memset((void *)var, 0, sizeof(t_data));
 	gettimeofday(&var->s_time, NULL);
 	var->philo_n = parse_int(argv[1], var);
 	var->die_time = parse_int(argv[2], var);
@@ -81,7 +82,7 @@ static t_data	*init_var(char **argv)
 	var->forks = malloc(var->philo_n * sizeof(t_fork));
 	if (!var->forks || !var->philo_n)
 		error(NULL, var);
-	ft_bzero((void *)var->forks, sizeof(var->philo_n * sizeof(t_fork)));
+	memset((void *)var->forks, 0, sizeof(var->philo_n * sizeof(t_fork)));
 	if (init_var_mutex(var))
 		error(NULL, var);
 	return (var);
@@ -96,7 +97,8 @@ int	main(int argc, char **argv)
 	var = NULL;
 	if (argc == 5)
 	{
-		check_argv(argv);
+		if (check_argv(argv))
+			return (-1);
 		var = init_var(argv);
 		philos = init_philos(var);
 		philo_thread(philos);

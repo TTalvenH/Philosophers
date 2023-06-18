@@ -1,65 +1,51 @@
 #include "philosophers.h"
 
-static int	get_forks_first_left(t_philo *philos)
-{	
-	pthread_mutex_lock(&philos->left->lock);
-	if (!philos->left->fork)
+static int	get_second(t_fork *first, t_fork *second, t_philo *philos)
+{
+	while (1)
 	{
-		philos->left->fork = 1;
-		state_message(philos, FORKS);
-		pthread_mutex_unlock(&philos->left->lock);
-		while (1)
+		if (pthread_mutex_error(&second->lock, LOCK))
+			return (-1);
+		if (!second->fork)
 		{
-			pthread_mutex_lock(&philos->right->lock);
-			if (!philos->right->fork)
-			{
-				philos->right->fork = 1;
-				state_message(philos, FORKS);
-				pthread_mutex_unlock(&philos->left->lock);
-				pthread_mutex_unlock(&philos->right->lock);
-				return (0);
-			}
-			else
-				pthread_mutex_unlock(&philos->right->lock);
+			second->fork = 1;
+			state_message(philos, FORKS);
+			if (pthread_mutex_error(&first->lock, UNLOCK))
+				return (-1);
+			if (pthread_mutex_error(&second->lock, UNLOCK))
+				return (-1);
+			return (0);
 		}
+		else
+			if (pthread_mutex_error(&second->lock, UNLOCK))
+				return (-1);
+		custom_delay(philos, 1);
 	}
-	else
-		pthread_mutex_unlock(&philos->left->lock);
-	return (1);
 }
 
-static int	get_forks_first_right(t_philo *philos)
+static int	get_forks(t_fork *first, t_fork *second, t_philo *philos)
 {	
-	pthread_mutex_lock(&philos->right->lock);
-	if (!philos->right->fork)
+
+	if (pthread_mutex_error(&first->lock, LOCK))
+		return (-1);
+	if (!first->fork)
 	{
-		philos->right->fork = 1;
+		first->fork = 1;
 		state_message(philos, FORKS);
-		pthread_mutex_unlock(&philos->right->lock);
-		while (1)
-		{
-			pthread_mutex_lock(&philos->left->lock);
-			if (!philos->left->fork)
-			{
-				philos->left->fork = 1;
-				state_message(philos, FORKS);
-				pthread_mutex_unlock(&philos->right->lock);
-				pthread_mutex_unlock(&philos->left->lock);
-				return (0);
-			}
-			else
-				pthread_mutex_unlock(&philos->left->lock);
-		}
+		if (pthread_mutex_error(&first->lock, UNLOCK))
+			return (-1);
+		return (get_second(first, second, philos));
 	}
 	else
-		pthread_mutex_unlock(&philos->right->lock);
+		if (pthread_mutex_error(&first->lock, UNLOCK))
+			return (-1);
 	return (1);
 }
 
 int	pick_forks(t_philo *philos)
 {
 	t_timeval	c_time;
-
+	int			rtn;
 	while (1)
 	{
 		gettimeofday(&c_time, NULL);
@@ -68,15 +54,16 @@ int	pick_forks(t_philo *philos)
 		if (elapsed_time(&philos->last_meal, &c_time) > philos->vars->die_time)
 			return (1);
 		if (philos->id & 1)
-		{
-			if (!get_forks_first_left(philos))
-				return (0);
-		}
+			rtn = get_forks(philos->left, philos->right, philos);
 		else 
+			rtn = get_forks(philos->right, philos->left, philos);
+		if (rtn < 0)
 		{
-			if (!get_forks_first_right(philos))
-				return (0);
+			philos->vars->error = 1;
+			return (-1);
 		}
-		usleep(100);
+		if (!rtn)
+			return (0);
+		custom_delay(philos, 1);
 	}
 }
