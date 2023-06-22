@@ -11,7 +11,7 @@ int	check_starved_or_error(t_philo *philos)
 			thread_error(philos);
 			if (pthread_mutex_error(&philos->vars->starved_mutex, UNLOCK))
 				return (-1);
-			return(-1);
+			return (-1);
 		}
 		if (pthread_mutex_error(&philos->vars->starved_mutex, UNLOCK))
 			return (-1);
@@ -22,13 +22,15 @@ int	check_starved_or_error(t_philo *philos)
 	return (0);
 }
 
-int		state_message(t_philo *philos, int task)
+int	state_message(t_philo *philos, int task)
 {
 	size_t		time_stamp;
 	t_timeval	c_time;
 
 	gettimeofday(&c_time, NULL);
 	time_stamp = elapsed_time(&philos->vars->s_time, &c_time);
+	if (task == DEAD)
+		return (printf("%zu %zu died\n", time_stamp, philos->id));
 	if (!check_starved_or_error(philos))
 	{
 		if (pthread_mutex_error(&philos->vars->output_mutex, LOCK))
@@ -38,14 +40,12 @@ int		state_message(t_philo *philos, int task)
 		else if (task == SLEEPING)
 			printf("%zu %zu is sleeping\n", time_stamp, philos->id);
 		else if (task == THINKING)
-			printf("%zu %zu is thinking\n", time_stamp,philos->id);
+			printf("%zu %zu is thinking\n", time_stamp, philos->id);
 		else if (task == FORKS)
 			printf("%zu %zu has taken a fork\n", time_stamp, philos->id);
 		if (pthread_mutex_error(&philos->vars->output_mutex, UNLOCK))
 			return (-1);
 	}
-	else if (task == DEAD)
-		printf("%zu %zu died\n", time_stamp, philos->id);
 	return (0);
 }
 
@@ -56,9 +56,9 @@ static int	starved(t_philo *philos)
 	if (!philos->vars->starved)
 	{
 		philos->vars->starved = 1;
+		state_message(philos, DEAD);
 		if (pthread_mutex_error(&philos->vars->starved_mutex, UNLOCK))
 			return (-1);
-		state_message(philos, DEAD);
 	}
 	if (pthread_mutex_error(&philos->vars->starved_mutex, UNLOCK))
 		return (-1);
@@ -100,7 +100,7 @@ void	*routine(void *arg)
 	{
 		rtn = check_starved_or_error(philos);
 		if (rtn)
-			break;
+			break ;
 		if (rtn < 0)
 			return ((void *)-1);
 		if (pick_forks(philos))

@@ -46,6 +46,7 @@ int	pick_forks(t_philo *philos)
 {
 	t_timeval	c_time;
 	int			rtn;
+
 	while (1)
 	{
 		gettimeofday(&c_time, NULL);
@@ -55,7 +56,7 @@ int	pick_forks(t_philo *philos)
 			return (1);
 		if (philos->id & 1)
 			rtn = get_forks(philos->left, philos->right, philos);
-		else 
+		else
 			rtn = get_forks(philos->right, philos->left, philos);
 		if (rtn < 0)
 		{
