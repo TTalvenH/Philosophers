@@ -56,19 +56,22 @@ static int	init_var_mutex(t_data *var)
 	i = 0;
 	while (i < (int)var->philo_n)
 	{
-		if (pthread_mutex_init(&var->forks[i++].lock, NULL))
+		if (pthread_mutex_init(&var->forks[i++], NULL))
 			return (-1);
 	}
 	if (pthread_mutex_init(&var->output_mutex, NULL))
 		return (-1);
-	if (pthread_mutex_init(&var->starved_mutex, NULL))
+	if (pthread_mutex_init(&var->state_mutex, NULL))
+		return (-1);
+	if (pthread_mutex_init(&var->eaten_mutex, NULL))
 		return (-1);
 	return (0);
 }
 
-static t_data	*init_var(char **argv)
+static t_data	*init_var(int argc, char **argv)
 {
 	t_data *var;
+	int		fork_size;
 
 	var = malloc(sizeof(t_data));
 	if (!var)
@@ -79,10 +82,13 @@ static t_data	*init_var(char **argv)
 	var->die_time = parse_int(argv[2], var);
 	var->eat_time = parse_int(argv[3], var);
 	var->sleep_time = parse_int(argv[4], var);
-	var->forks = malloc(var->philo_n * sizeof(t_fork));
+	if (argc == 6)
+		var->must_eat = parse_int(argv[5], var);
+	fork_size = var->philo_n * sizeof(pthread_mutex_t);
+	var->forks = malloc(fork_size);
 	if (!var->forks || !var->philo_n)
 		error(NULL, var);
-	memset((void *)var->forks, 0, sizeof(var->philo_n * sizeof(t_fork)));
+	memset((void *)var->forks, 0, fork_size);
 	if (init_var_mutex(var))
 		error(NULL, var);
 	return (var);
@@ -95,11 +101,11 @@ int	main(int argc, char **argv)
 
 	philos = NULL;
 	var = NULL;
-	if (argc == 5)
+	if (argc == 5 || argc == 6)
 	{
 		if (check_argv(argv))
 			return (-1);
-		var = init_var(argv);
+		var = init_var(argc, argv);
 		philos = init_philos(var);
 		philo_thread(philos);
 		free_everything(philos);

@@ -5,7 +5,7 @@ NAME = philo
 CC = cc
 
 # compiler flags
-CFLAGS = -Wall -Werror -Wextra -MMD -O3
+CFLAGS = -Wall -Werror -Wextra -MMD -O0
 INCLUDE = -I./include
 DEBUG_FLAGS = -g -O0 -fsanitize=address
 

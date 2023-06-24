@@ -1,5 +1,5 @@
 #include "philosophers.h"
-#include <stdio.h> //! do we need?
+#include <stdio.h>
 
 size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time)
 {
@@ -39,11 +39,7 @@ void	*philo_thread(t_philo *philos)
 	}
 	i = 0;
 	while (i < philos[0].vars->philo_n)
-	{
-		if (pthread_join(philos[i].thread, NULL))
-			printf("join fail\n");
-		i++;
-	}
+		pthread_join(philos[i++].thread, NULL);
 	if (philos->vars->error)
 		printf("Error\n");
 	return (NULL);

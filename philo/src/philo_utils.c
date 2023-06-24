@@ -8,7 +8,7 @@ void	free_everything(t_philo *philos)
 
 	i = 0;
 	while (i < (int)philos->vars->philo_n)
-		pthread_mutex_destroy(&philos->vars->forks[i++].lock);
+		pthread_mutex_destroy(&philos->vars->forks[i++]);
 	free(philos->vars->forks);
 	free(philos->vars);
 	free(philos);
@@ -23,26 +23,32 @@ void	error(t_philo *philos, t_data *var)
 	exit (-1);
 }
 
-void	thread_error(t_philo *philos)
+int	state_message(t_philo *philos, char *message)
 {
-	int	i;
+	size_t		time_stamp;
+	t_timeval	c_time;
 
-	i = 0;
-	while (i < (int)philos->vars->philo_n)
-		pthread_mutex_destroy(&philos->vars->forks[i++].lock);
+	pthread_mutex_lock(&philos->vars->output_mutex);
+	if (!check_state(philos) && !philos->i)
+	{
+		gettimeofday(&c_time, NULL);
+		time_stamp = elapsed_time(&philos->vars->s_time, &c_time);
+		printf("%zu %zu %s\n", time_stamp, philos->id, message);
+	}
+	pthread_mutex_unlock(&philos->vars->output_mutex);
+	return (0);
 }
 
-int	pthread_mutex_error(pthread_mutex_t *mutex, int	lock)
+int	check_state(t_philo *philos)
 {
-	if (lock == LOCK)
+	pthread_mutex_lock(&philos->vars->state_mutex);
+	if (philos->vars->philos_done_eating == philos->vars->philo_n)
+		philos->vars->done = 1;
+	if (philos->vars->done)
 	{
-		if (pthread_mutex_lock(mutex))
-			return (-1);
+		pthread_mutex_unlock(&philos->vars->state_mutex);
+		return (1);
 	}
-	else if (lock == UNLOCK)
-	{
-		if (pthread_mutex_unlock(mutex))
-			return (-1);
-	}
+	pthread_mutex_unlock(&philos->vars->state_mutex);
 	return (0);
 }
