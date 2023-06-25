@@ -10,8 +10,8 @@ INCLUDE = -I./include
 DEBUG_FLAGS = -g -O0 -fsanitize=address
 
 # src files and path for them
-VPATH = src:src/routine
-SRC = main.c philo_create.c philo_utils.c parse_int.c routine.c pick_forks.c
+VPATH = src:src/routine:src/utils
+SRC = main.c philo_create.c philo_utils.c parse_int.c routine.c pick_forks.c philo_utils2.c
 
 # obj files and path for them
 OBJ_DIR = obj

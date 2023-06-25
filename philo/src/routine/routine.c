@@ -15,7 +15,9 @@ static void	modify_eaten_state(t_philo *philos)
 static void	eating(t_philo *philos, size_t *eaten)
 {	
 	state_message(philos, "is eating");
+	pthread_mutex_lock(&philos->vars->state_mutex);
 	gettimeofday(&philos->last_meal, NULL);
+	pthread_mutex_unlock(&philos->vars->state_mutex);
 	custom_delay(philos, philos->vars->eat_time);
 	pthread_mutex_unlock(philos->left);
 	pthread_mutex_unlock(philos->right);
