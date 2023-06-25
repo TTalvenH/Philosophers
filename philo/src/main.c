@@ -82,6 +82,7 @@ static t_data	*init_var(int argc, char **argv)
 	var->die_time = parse_int(argv[2], var);
 	var->eat_time = parse_int(argv[3], var);
 	var->sleep_time = parse_int(argv[4], var);
+	var->done = -2;
 	if (argc == 6)
 		var->must_eat = parse_int(argv[5], var);
 	fork_size = var->philo_n * sizeof(pthread_mutex_t);
@@ -107,7 +108,7 @@ int	main(int argc, char **argv)
 			return (-1);
 		var = init_var(argc, argv);
 		philos = init_philos(var);
-		philo_thread(philos);
+		philo_create(philos);
 		free_everything(philos);
 		return (0);
 	}

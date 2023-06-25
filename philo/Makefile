@@ -11,7 +11,7 @@ DEBUG_FLAGS = -g -O0 -fsanitize=address
 
 # src files and path for them
 VPATH = src:src/routine
-SRC = main.c philo_thread.c philo_utils.c parse_int.c routine.c pick_forks.c
+SRC = main.c philo_create.c philo_utils.c parse_int.c routine.c pick_forks.c
 
 # obj files and path for them
 OBJ_DIR = obj

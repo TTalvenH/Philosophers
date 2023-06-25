@@ -7,7 +7,7 @@ static void	modify_eaten_state(t_philo *philos)
 	philos->i = 1;
 	pthread_mutex_lock(&philos->vars->state_mutex);
 	if (philos->vars->philos_done_eating == philos->vars->philo_n)
-		philos->vars->done = 1;
+		philos->vars->done = -1;
 	pthread_mutex_unlock(&philos->vars->state_mutex);
 	pthread_mutex_unlock(&philos->vars->eaten_mutex);
 }

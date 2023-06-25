@@ -42,9 +42,7 @@ int	state_message(t_philo *philos, char *message)
 int	check_state(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->vars->state_mutex);
-	if (philos->vars->philos_done_eating == philos->vars->philo_n)
-		philos->vars->done = 1;
-	if (philos->vars->done)
+	if (philos->vars->done == -1 || philos->vars->done >= 0)
 	{
 		pthread_mutex_unlock(&philos->vars->state_mutex);
 		return (1);

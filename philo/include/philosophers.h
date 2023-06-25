@@ -16,7 +16,6 @@ typedef struct timeval	t_timeval;
 
 typedef struct s_data
 {
-	int				error;
 	size_t			philo_n;
 	size_t			die_time;
 	size_t			eat_time;
@@ -46,7 +45,7 @@ typedef struct s_philo
 }t_philo;
 
 int		parse_int(char *str, t_data *var);
-void	*philo_thread(t_philo *philos);
+void	*philo_create(t_philo *philos);
 void	*routine(void *arg);
 
 size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time);
