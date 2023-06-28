@@ -71,5 +71,6 @@ void	error(t_philo *philos, t_data *var);
 void	free_everything(t_philo *philos);
 int		check_state(t_philo *philos);
 int		state_message(t_philo *philos, char *message);
+int		parity(int number);
 
 #endif

@@ -42,17 +42,20 @@ void	*routine(void *arg)
 {
 	t_philo		*philos;
 	size_t		eaten;
-
 	eaten = 0;
+
 	philos = (t_philo *)arg;
 	gettimeofday(&philos->last_meal, NULL);
-	usleep((philos->id & 1) * 500);
+	if (parity((int)philos->id))
+		usleep(500);
 	while (1)
 	{
 		if (check_state(philos))
 		{
 			break ;
 		}
+		if (parity(philos->vars->philo_n))
+			custom_delay(philos, philos->vars->eat_time - 10);
 		pick_forks(philos);
 		eating(philos, &eaten);
 		state_message(philos, "is sleeping");

@@ -25,3 +25,8 @@ void	custom_delay(t_philo *philo, unsigned int msec)
 		gettimeofday(&current_time, NULL);
 	}
 }
+
+int	parity(int number)
+{
+	return (number & 1);
+}
