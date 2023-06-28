@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/28 15:52:08 by ttalvenh          #+#    #+#             */
+/*   Updated: 2023/06/28 15:52:14 by ttalvenh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
 static void	modify_eaten_state(t_philo *philos)
@@ -13,7 +25,7 @@ static void	modify_eaten_state(t_philo *philos)
 }
 
 static void	eating(t_philo *philos, size_t *eaten)
-{	
+{
 	state_message(philos, "is eating");
 	pthread_mutex_lock(&philos->vars->state_mutex);
 	gettimeofday(&philos->last_meal, NULL);
@@ -21,8 +33,8 @@ static void	eating(t_philo *philos, size_t *eaten)
 	custom_delay(philos, philos->vars->eat_time);
 	pthread_mutex_unlock(philos->left);
 	pthread_mutex_unlock(philos->right);
-	if (philos->vars->must_eat &&
-		 !philos->i && ++*eaten == philos->vars->must_eat)
+	if (philos->vars->must_eat
+		&& !philos->i && ++*eaten == philos->vars->must_eat)
 		modify_eaten_state(philos);
 }
 

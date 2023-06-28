@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/28 15:51:42 by ttalvenh          #+#    #+#             */
+/*   Updated: 2023/06/28 15:51:44 by ttalvenh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,7 +42,7 @@ static int	check_argv(char **argv)
 
 static t_philo	*init_philos(t_data *var)
 {
-	t_philo *philos;
+	t_philo	*philos;
 	size_t	i;
 
 	i = 0;
@@ -40,7 +52,7 @@ static t_philo	*init_philos(t_data *var)
 	memset((void *)philos, 0, sizeof(t_philo) * var->philo_n);
 	while (i < var->philo_n)
 	{
-		philos[i].id = i + 1; 	
+		philos[i].id = i + 1;
 		philos[i].left = &var->forks[i];
 		philos[i].right = &var->forks[(i + 1) % var->philo_n];
 		philos[i].vars = var;
@@ -70,7 +82,7 @@ static int	init_var_mutex(t_data *var)
 
 static t_data	*init_var(int argc, char **argv)
 {
-	t_data *var;
+	t_data	*var;
 	int		fork_size;
 
 	var = malloc(sizeof(t_data));

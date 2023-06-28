@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/28 15:53:10 by ttalvenh          #+#    #+#             */
+/*   Updated: 2023/06/28 15:53:20 by ttalvenh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
@@ -31,7 +43,7 @@ typedef struct s_data
 }t_data;
 
 typedef struct s_philo
-{	
+{
 	pthread_t			thread;
 	size_t				id;
 	t_timeval			last_meal;
@@ -61,6 +73,5 @@ void	error(t_philo *philos, t_data *var);
 void	free_everything(t_philo *philos);
 int		check_state(t_philo *philos);
 int		state_message(t_philo *philos, char *message);
-
 
 #endif
