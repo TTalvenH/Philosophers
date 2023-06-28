@@ -21,8 +21,6 @@
 
 # define INT_MAX 2147483647
 # define INT_MIN -2147483648
-# define LOCK 0
-# define UNLOCK 1
 
 typedef struct timeval	t_timeval;
 
@@ -57,7 +55,7 @@ typedef struct s_philo
 }t_philo;
 
 int		parse_int(char *str, t_data *var);
-void	*philo_create(t_philo *philos);
+void	*philo_thread(t_philo *philos);
 void	*routine(void *arg);
 
 size_t	elapsed_time(t_timeval *start_time, t_timeval *end_time);
