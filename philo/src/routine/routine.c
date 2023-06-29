@@ -42,8 +42,8 @@ void	*routine(void *arg)
 {
 	t_philo		*philos;
 	size_t		eaten;
-	eaten = 0;
 
+	eaten = 0;
 	philos = (t_philo *)arg;
 	gettimeofday(&philos->last_meal, NULL);
 	if (parity((int)philos->id))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttalvenh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/29 13:33:55 by ttalvenh          #+#    #+#             */
+/*   Updated: 2023/06/29 13:33:58 by ttalvenh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +41,7 @@ int	state_message(t_philo *philos, char *message)
 	t_timeval	c_time;
 
 	pthread_mutex_lock(&philos->vars->output_mutex);
-	if (!check_state(philos) && !philos->i)
+	if (!check_state(philos))
 	{
 		gettimeofday(&c_time, NULL);
 		time_stamp = elapsed_time(&philos->vars->s_time, &c_time);

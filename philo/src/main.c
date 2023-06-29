@@ -110,6 +110,7 @@ int	main(int argc, char **argv)
 {
 	t_philo	*philos;
 	t_data	*var;
+
 	philos = NULL;
 	var = NULL;
 	if (argc == 5 || argc == 6)
